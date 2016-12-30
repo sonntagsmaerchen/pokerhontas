@@ -4,6 +4,7 @@ import sys
 import os
 
 import helper
+from classes import *
 
 if __name__ == '__main__':
     path = sys.argv[1]
