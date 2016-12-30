@@ -1,7 +1,13 @@
+"""
+Helper functions for tracking files and directories for changes.
+"""
+
 import os
 import time
 
 def followFile(fileIn):
+    """Tracks and returns changes in a file"""
+
     while True:
         line = fileIn.readline()
         if not line:
@@ -10,6 +16,8 @@ def followFile(fileIn):
         yield line
 
 def followDir(path):
+    """Tracks and returns changes in a directory"""
+
     fileNames = os.listdir(path)
     while True:
         newFileNames = os.listdir(path)
