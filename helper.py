@@ -24,5 +24,7 @@ def followDir(path):
         if fileNames == newFileNames:
             time.sleep(0.5)
             continue
-        files = list(set(newFileNames) - set(fileNames))
-        return files[0]
+        if len(newFileNames) > len(fileNames):
+            files = list(set(newFileNames) - set(fileNames))
+            return files[0]
+
