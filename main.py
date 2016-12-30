@@ -1,17 +1,17 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 import sys
 import os
 
-from helper import *
+import helper
 
 if __name__ == '__main__':
     path = sys.argv[1]
 
-    filePath = followDir(path)
+    filePath = helper.followDir(path)
 
     fileInput = open(path + filePath, "r", 1)
 
-    data = followFile(fileInput)
+    data = helper.followFile(fileInput)
     for line in data:
         print(line)
