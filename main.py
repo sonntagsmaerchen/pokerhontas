@@ -8,9 +8,9 @@ from helper import *
 if __name__ == '__main__':
     path = sys.argv[1]
 
-    trackedFiles = followDir(path)
+    filePath = followDir(path)
 
-    fileInput = open(filePath, "r", 1)
+    fileInput = open(path + filePath, "r", 1)
 
     data = followFile(fileInput)
     for line in data:
