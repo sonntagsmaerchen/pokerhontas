@@ -1,4 +1,3 @@
-import os
 import time
 
 def followFile(fileIn):
@@ -16,7 +15,5 @@ def followDir(path):
         if fileNames == newFileNames:
             time.sleep(0.5)
             continue
-        originalFileNames = fileNames
+        yield list(set(newFileNames) - set(fileNames))
         fileNames = newFileNames
-        yield list(set(newFileNames) - set(originalFileNames))
-

@@ -2,7 +2,6 @@
 
 import sys
 import os
-from itertools import chain
 
 from helper import *
 
@@ -11,18 +10,8 @@ if __name__ == '__main__':
 
     trackedFiles = followDir(path)
 
-    data = []
-    for files in trackedFiles:
-        for filePath in files:
-            fileInput = open(path + filePath, "r", 1)
-            data = chain(data, followFile(fileInput))
+    fileInput = open(filePath, "r", 1)
 
-
-            end = []
-            for gen in data:
-                end = zip(end, gen)
-                print(end)
-
-            for line in end:
-                print(line)
-
+    data = followFile(fileInput)
+    for line in data:
+        print(line)
