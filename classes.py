@@ -16,11 +16,16 @@ class Game:
 
     def update(self, newBigBlind):
         self.bigBlind = newBigBlind
-        if self.handCount >= 1:
-            for player in self.players:
-                player.printStats(self.handCount)
-        print("\n\n\n")
+        self.print()
         self.handCount += 1
+
+    def print(self):
+        if self.handCount >= 1:
+            print("Hand count: {0:>3} - Remaining players: {1}"
+                  .format(self.handCount, len(self.players)))
+            for player in self.players:
+                player.printStats(self.handCount, self.bigBlind)
+        print("\n")
 
     def addPlayer(self, newPlayer):
         self.players.append(newPlayer)
@@ -36,6 +41,9 @@ class Game:
         elif words[0] == "Seat":
             self.inSeat = True
             self.currentPlayers.append(words[2])
+            for player in self.players:
+                if player.name == words[2]:
+                    player.chipCount = int(words[3][1:])
 
         elif self.inSeat:
             playerNames = (player.name for player in self.players)
@@ -79,9 +87,9 @@ class Player:
     """A player in a poker game"""
 
     def __init__(self, newSeat, newName, newChipCount):
-        self.seat = newSeat
+        self.seat = int(newSeat)
         self.name = newName
-        self.chipCount = newChipCount
+        self.chipCount = int(newChipCount)
         self.hasBet = False
         self.hasRaised = False
         self.preFlopAggresor = 0
@@ -93,13 +101,16 @@ class Player:
     def setChipCount(self, newChipCount):
         self.chipCount = newChipCount
 
-    def printStats(self, handCount):
+    def printStats(self, handCount, bigBlind):
+        output = "{0:>15} ({1:>3.0f} BB) | VPIP: {2:>6.2f}% | PFR: {3:>6.2f}% |"
+        output = output.format(self.name, self.chipCount/bigBlind,
+                               (self.vpip/handCount)*100,
+                               (self.pfr/handCount)*100)
+        output += " FlopCBet: "
         if self.preFlopAggresor > 0:
-            output = self.name + " VPIP: " + ("{0:.2f}".format((self.vpip/handCount)*100)) + "%"\
-                               + " PFR: " + ("{0:.2f}".format((self.pfr/handCount)*100)) + "%"\
-                               + " FlopCBet: " + ("{0:.2f}".format((self.flopCbet/self.preFlopAggresor)*100)) + "%"
+            output += "{0:>6.2f}%"
+            output = output.format((self.flopCbet/self.preFlopAggresor)*100)
         else:
-            output = self.name + " VPIP: " + ("{0:.2f}".format((self.vpip/handCount)*100)) + "%"\
-                               + " PFR: " + ("{0:.2f}".format((self.pfr/handCount)*100)) + "%"\
-                               + " FlopCBet: / "
+            output += "      /"
+
         print(output)
