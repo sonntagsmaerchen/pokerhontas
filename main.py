@@ -93,7 +93,7 @@ if __name__ == '__main__':
                 for player in game.players:
                     player.hasBet = False
                     player.hasRaised = False
-                    if player.name == game.lastPlayertoRaise
+                    if player.name == game.lastPlayertoRaise\
                        and state == "FLOP": player.preFlopAggresor += 1
 
         #change from SUMMARY to GAMEDATA (preflop) at start of new hand
