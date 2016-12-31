@@ -94,12 +94,14 @@ if __name__ == '__main__':
                     player.hasBet = False
                     player.hasRaised = False
                     if player.name == game.lastPlayertoRaise\
-                       and state == "FLOP": player.preFlopAggresor += 1
+                       and state == "FLOP" and not player.allIn :
+                       player.preFlopAggresor += 1
 
         #change from SUMMARY to GAMEDATA (preflop) at start of new hand
         elif line == "\n" and state != "GAMEDATA":
             state = "GAMEDATA"
             game.lastPlayertoRaise = ""
+            for player in game.players: player.allIn = False
 
         #state handling
         if state == "GAMEDATA": game.gamedata(words)

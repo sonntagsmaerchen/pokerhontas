@@ -68,6 +68,7 @@ class Game:
                     if not player.hasRaised and words[1] == "raises":
                         player.pfr += 1
                         player.hasRaised = True
+                        if len(words) > 5: player.allIn = True
                         self.lastPlayertoRaise = player.name
 
     def flop(self, words):
@@ -92,6 +93,7 @@ class Player:
         self.chipCount = int(newChipCount)
         self.hasBet = False
         self.hasRaised = False
+        self.allIn = False
         self.preFlopAggresor = 0
 
         self.vpip = 0
