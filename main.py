@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
         if words[0] == "Seat":
             inSeat = True
-            player = Player(words[1][:-1], words[2], words[4][1:])
+            player = Player(words[1][:-1], words[2], words[3][1:])
             game.addPlayer(player)
 
         elif words[1] == "posts":
