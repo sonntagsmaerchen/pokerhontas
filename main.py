@@ -26,7 +26,6 @@ if __name__ == '__main__':
                                                           .split("/")[1])
     game = Game(stake, bigBlind)
 
-    inSeat = False
     for line in fileInput:
         words = line.split(" ")
 
@@ -35,8 +34,10 @@ if __name__ == '__main__':
             player = Player(words[1][:-1], words[2], words[4][1:])
             game.addPlayer(player)
 
-        elif inSeat:
-            break
+        elif words[1] == "posts":
+            print(words[0])
+            if words[2] == "big":
+                break
 
     state = "GAMEDATA"
 
@@ -47,10 +48,13 @@ if __name__ == '__main__':
         if words[0] == "***":
             state = ""
             for word in words[1:]:
-                if word == "***": break
+                if word == "***" or word == "***\n": break
                 state += word
+            print("  " + state)
 
-        if line == "\n": state = "GAMEDATA"
+        if line == "\n" and state != "GAMEDATA":
+            state = "GAMEDATA"
+            print(state)
 
         if state == "GAMEDATA": game.gamedata(words)
         elif state == "HOLECARDS":
