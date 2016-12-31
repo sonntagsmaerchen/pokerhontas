@@ -39,10 +39,22 @@ class Game:
             for name in diffplayers:
                 for player in self.players:
                     if player.name == name: self.removePlayer(player)
-                    break
 
             self.currentPlayers = []
             self.inSeat = False
+
+    # do stuff with blinds here
+
+    def holeCards(self, words):
+        if words[1] == "calls" or words[1] == "raises":
+            for player in self.players:
+                if player.name == words[0][:-1]:
+                    if not player.hasBet:
+                        player.vpip += 1
+                        player.hasBet = True
+                    if not player.hasRaised and words[1] == "raises":
+                        player.pfr += 1
+                        player.hasRaised = True
 
 class Player:
     """A player in a poker game"""
@@ -51,6 +63,8 @@ class Player:
         self.seat = newSeat
         self.name = newName
         self.chipCount = newChipCount
+        self.hasBet = False
+        self.hasRaised = False
 
         self.vpip = 0
         self.pfr = 0

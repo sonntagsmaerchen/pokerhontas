@@ -35,7 +35,6 @@ if __name__ == '__main__':
             game.addPlayer(player)
 
         elif words[1] == "posts":
-            print(words[0])
             if words[2] == "big":
                 break
 
@@ -46,19 +45,20 @@ if __name__ == '__main__':
         words = line.split(" ")
 
         if words[0] == "***":
+            for player in game.players:
+                player.hasBet = False
+                player.hasRaised = False
+
             state = ""
             for word in words[1:]:
                 if word == "***" or word == "***\n": break
                 state += word
-            print("  " + state)
 
         if line == "\n" and state != "GAMEDATA":
             state = "GAMEDATA"
-            print(state)
 
         if state == "GAMEDATA": game.gamedata(words)
-        elif state == "HOLECARDS":
-            a=1
+        elif state == "HOLECARDS": game.holeCards(words)
         elif state == "FLOP":
             a=1
         elif state == "TURN":
