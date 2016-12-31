@@ -77,23 +77,32 @@ if __name__ == '__main__':
     for line in data:
         words = line.split(" ")
 
+        #state changing
         if words[0] == "***":
-            for player in game.players:
-                player.hasBet = False
-                player.hasRaised = False
 
+            #change from HOLECARDS to next state (either FLOP or SUMMARY)
+            if state == "HOLECARDS":
+                for player in game.players:
+                    player.hasBet = False
+                    player.hasRaised = False
+                    if player.name == game.lastPlayertoRaise:
+                        player.preFlopAggresor += 1
+
+            #get new state
             state = ""
             for word in words[1:]:
                 if word == "***" or word == "***\n": break
                 state += word
 
-        if line == "\n" and state != "GAMEDATA":
+        #change from SUMMARY to GAMEDATA (preflop) at start of new hand
+        elif line == "\n" and state != "GAMEDATA":
             state = "GAMEDATA"
+            game.lastPlayertoRaise = ""
 
+        #state handling
         if state == "GAMEDATA": game.gamedata(words)
         elif state == "HOLECARDS": game.holeCards(words)
-        elif state == "FLOP":
-            a=1
+        elif state == "FLOP": game.flop(words)
         elif state == "TURN":
             a=1
         elif state == "RIVER":

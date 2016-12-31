@@ -11,6 +11,7 @@ class Game:
         self.update(newBigBlind)
         self.players = []
         self.currentPlayers = []
+        self.lastPlayertoRaise = ""
         self.inSeat = False
 
     def update(self, newBigBlind):
@@ -59,6 +60,20 @@ class Game:
                     if not player.hasRaised and words[1] == "raises":
                         player.pfr += 1
                         player.hasRaised = True
+                        self.lastPlayertoRaise = player.name
+
+    def flop(self, words):
+        if words[1] == "bets":
+            for player in self.players:
+                if player.name == words[0][:-1]:
+                    if self.lastPlayertoRaise == player.name:
+                        player.flopCbet +=1
+                    self.lastPlayertoRaise = player.name
+
+        elif words[1] == "raises":
+            for player in self.players:
+                if player.name == words[0][:-1]:
+                    self.lastPlayertoRaise = player.name
 
 class Player:
     """A player in a poker game"""
@@ -69,14 +84,22 @@ class Player:
         self.chipCount = newChipCount
         self.hasBet = False
         self.hasRaised = False
+        self.preFlopAggresor = 0
 
         self.vpip = 0
         self.pfr = 0
+        self.flopCbet = 0
 
     def setChipCount(self, newChipCount):
         self.chipCount = newChipCount
 
     def printStats(self, handCount):
-        output = self.name + " VPIP: " + ("{0:.2f}".format((self.vpip/handCount)*100)) + "%"\
-                           + " PFR: " + ("{0:.2f}".format((self.pfr/handCount)*100)) + "%"
+        if self.preFlopAggresor > 0:
+            output = self.name + " VPIP: " + ("{0:.2f}".format((self.vpip/handCount)*100)) + "%"\
+                               + " PFR: " + ("{0:.2f}".format((self.pfr/handCount)*100)) + "%"\
+                               + " FlopCBet: " + ("{0:.2f}".format((self.flopCbet/self.preFlopAggresor)*100)) + "%"
+        else:
+            output = self.name + " VPIP: " + ("{0:.2f}".format((self.vpip/handCount)*100)) + "%"\
+                               + " PFR: " + ("{0:.2f}".format((self.pfr/handCount)*100)) + "%"\
+                               + " FlopCBet: / "
         print(output)
