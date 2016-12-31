@@ -80,19 +80,21 @@ if __name__ == '__main__':
         #state changing
         if words[0] == "***":
 
-            #change from HOLECARDS to next state (either FLOP or SUMMARY)
-            if state == "HOLECARDS":
-                for player in game.players:
-                    player.hasBet = False
-                    player.hasRaised = False
-                    if player.name == game.lastPlayertoRaise:
-                        player.preFlopAggresor += 1
+            prevState = state
 
             #get new state
             state = ""
             for word in words[1:]:
                 if word == "***" or word == "***\n": break
                 state += word
+
+            #change from HOLECARDS to next state (either FLOP or SUMMARY)
+            if prevState == "HOLECARDS":
+                for player in game.players:
+                    player.hasBet = False
+                    player.hasRaised = False
+                    if player.name == game.lastPlayertoRaise
+                       and state == "FLOP": player.preFlopAggresor += 1
 
         #change from SUMMARY to GAMEDATA (preflop) at start of new hand
         elif line == "\n" and state != "GAMEDATA":
