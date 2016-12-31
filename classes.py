@@ -14,8 +14,12 @@ class Game:
         self.inSeat = False
 
     def update(self, newBigBlind):
-        self.handCount += 1
         self.bigBlind = newBigBlind
+        if self.handCount >= 1:
+            for player in self.players:
+                player.printStats(self.handCount)
+        print("\n\n\n")
+        self.handCount += 1
 
     def addPlayer(self, newPlayer):
         self.players.append(newPlayer)
@@ -71,3 +75,8 @@ class Player:
 
     def setChipCount(self, newChipCount):
         self.chipCount = newChipCount
+
+    def printStats(self, handCount):
+        output = self.name + " VPIP: " + ("{0:.2f}".format((self.vpip/handCount)*100)) + "%"\
+                           + " PFR: " + ("{0:.2f}".format((self.pfr/handCount)*100)) + "%"
+        print(output)
