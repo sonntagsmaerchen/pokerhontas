@@ -2,6 +2,8 @@
 Collection of classes for a poker game's data.
 """
 
+import re
+
 class Game:
     """A class for a poker game"""
 
@@ -10,6 +12,8 @@ class Game:
         self.handCount = 0
         self.update(newBigBlind)
         self.players = []
+        self.currentPlayers = []
+        self.inSeat = False
 
     def update(self, newBigBlind):
         self.handCount += 1
@@ -21,6 +25,26 @@ class Game:
     def removePlayer(self, newPlayer):
         self.players.remove(newPlayer)
 
+    def gamedata(self, words):
+        if words[0] == "PokerStars":
+            bigBlind = int(words[13][1:-1].split("/")[1])
+            self.update(bigBlind)
+
+        elif words[0] == "Seat":
+            self.inSeat = True
+            self.currentPlayers.append(words[2])
+
+        elif self.inSeat:
+            playerNames = (player.name for player in self.players)
+            diffplayers = list(set(playerNames)-set(self.currentPlayers))
+
+            for name in diffplayers:
+                for player in self.players:
+                    if player.name == name: self.removePlayer(player)
+                    break
+
+            self.currentPlayers = []
+            self.inSeat = False
 
 class Player:
     """A player in a poker game"""

@@ -35,6 +35,30 @@ if __name__ == '__main__':
         elif inSeat:
             break
 
+    state = "GAMEDATA"
+
     data = helper.followFile(fileInput)
     for line in data:
-        print(line)
+        words = line.split(" ")
+
+        if words[0] == "***":
+            state = ""
+            for word in words[1:]:
+                if word == "***": break
+                state += word
+
+        if line == "\n": state = "GAMEDATA"
+
+        if state == "GAMEDATA": game.gamedata(words)
+        elif state == "HOLECARDS":
+            a=1
+        elif state == "FLOP":
+            a=1
+        elif state == "TURN":
+            a=1
+        elif state == "RIVER":
+            a=1
+        elif state == "SUMMARY":
+            a=1
+        elif state == "SHOWDOWN":
+            a=1
