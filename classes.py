@@ -2,8 +2,6 @@
 Collection of classes for a poker game's data.
 """
 
-import re
-
 class Game:
     """A class for a poker game"""
 
