@@ -89,3 +89,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# HandHistories
+HH*.txt
+
+# test dir
+test/

@@ -1,3 +1,3 @@
 # pokerhontas
 
-Program for tracking poker handhistories.
+Program for tracking PokerStars handhistories.
