@@ -10,6 +10,9 @@ from classes import *
 if __name__ == '__main__':
     path = sys.argv[1]
 
+    if path[-1:] != "/":
+        path += "/"
+
     filePath = helper.followDir(path)
 
     fileInput = open(path + filePath, "r", 1)
