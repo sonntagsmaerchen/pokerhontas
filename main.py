@@ -13,9 +13,42 @@ if __name__ == '__main__':
     if path[-1:] != "/":
         path += "/"
 
-    filePath = helper.followDir(path)
+    print("Specify a file? ", end="")
+    answered = False
+    while not answered:
+        userIn = input()
+        if re.match("[yY](es)?", userIn):
+            files = os.listdir(path)
+            n = 0
 
-    fileInput = open(path + filePath, "r", 1)
+            form = "{0:>3}: {1}"
+            for f in files:
+                print(form.format(str(n + 1), f))
+                n += 1
+
+            correctNumber = False
+            print("Please enter a number between 1 and " + str(n)\
+                  + " to select a file: ", end="")
+            fileNumber = int(input()) - 1
+
+            while not correctNumber:
+                if fileNumber >= 0 and fileNumber < n:
+                    fileName = files[fileNumber]
+                    correctNumber = True
+
+            print("Tracking " + fileName + "...")
+            fileInput = open(path + fileName, "r", 1)
+            answered = True
+
+        elif re.match("[nN]o?", userIn):
+            print("Watching " + path + " for new files...")
+            fileName = helper.followDir(path)
+            print("Found " + fileName + ". Tracking...")
+            fileInput = open(path + fileName, "r", 1)
+            answered = True
+
+        else:
+            print("Please enter yes or no: ", end="")
 
     header = fileInput.readline()
     # Matches $0.44+$0.06 for example
