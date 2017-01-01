@@ -5,9 +5,11 @@ Collection of classes for a poker game's data.
 class Game:
     """A class for a poker game"""
 
-    def __init__(self, newStake, newBigBlind):
+    def __init__(self, newStake, newBigBlind, window):
+        self.window = window
         self.stake = newStake
         self.handCount = 0
+        self.GUIPlayerBoxes = []
         self.update(newBigBlind)
         self.players = []
         self.currentPlayers = []
@@ -16,16 +18,31 @@ class Game:
 
     def update(self, newBigBlind):
         self.bigBlind = newBigBlind
-        self.print()
+        if self.window == 0:
+            self.printCLI()
+        else:
+            self.printGUI(self.window)
         self.handCount += 1
 
-    def print(self):
+    def printCLI(self):
         if self.handCount >= 1:
             print("Hand count: {0:>3} - Remaining players: {1}"
                   .format(self.handCount, len(self.players)))
             for player in self.players:
                 player.printStats(self.handCount, self.bigBlind)
         print("\n")
+
+    def printGUI(self, window):
+        for box in self.GUIPlayerBoxes:
+            updated = False
+            for player in self.players:
+                if player.name == box.layout().itemAt(0).widget().text().split("\n")[0]:
+                    box.updateUI(player, self.handCount, self.bigBlind)
+                    updated = True
+
+            if not updated:
+                box.setParent(None)
+                self.GUIPlayerBoxes.remove(box)
 
     def addPlayer(self, newPlayer):
         self.players.append(newPlayer)

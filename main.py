@@ -4,51 +4,29 @@ import sys
 import os
 import re
 
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+
+import ui
 import helper
 from classes import *
 
-if __name__ == '__main__':
-    path = sys.argv[1]
+def main(fileInput, USES_CLI):
 
-    if path[-1:] != "/":
-        path += "/"
+    window = 0
+    if not USES_CLI:
+        window = ui.Window("Pokerhontas", [0, 0, 500, 1080])
+        window.setFixedSize(500, 1080)
 
-    print("Specify a file? ", end="")
-    answered = False
-    while not answered:
-        userIn = input()
-        if re.match("[yY](es)?", userIn):
-            files = os.listdir(path)
-            n = 0
+        layout = QVBoxLayout(window)
 
-            form = "{0:>3}: {1}"
-            for f in files:
-                print(form.format(str(n + 1), f))
-                n += 1
+        window.setLayout(layout)
 
-            correctNumber = False
-            print("Please enter a number between 1 and " + str(n)\
-                  + " to select a file: ", end="")
-            fileNumber = int(input()) - 1
+        def exitHandler(self):
+            sys.exit()
 
-            while not correctNumber:
-                if fileNumber >= 0 and fileNumber < n:
-                    fileName = files[fileNumber]
-                    correctNumber = True
+        window.closeEvent = exitHandler
 
-            print("Tracking " + fileName + "...")
-            fileInput = open(path + fileName, "r", 1)
-            answered = True
-
-        elif re.match("[nN]o?", userIn):
-            print("Watching " + path + " for new files...")
-            fileName = helper.followDir(path)
-            print("Found " + fileName + ". Tracking...")
-            fileInput = open(path + fileName, "r", 1)
-            answered = True
-
-        else:
-            print("Please enter yes or no: ", end="")
 
     header = fileInput.readline()
     # Matches $0.44+$0.06 for example
@@ -57,7 +35,7 @@ if __name__ == '__main__':
     # Matches (10/20) for example
     bigBlind = int(re.search("\([0-9]*\/[0-9]*\)", header).group(0)[1:-1]\
                                                           .split("/")[1])
-    game = Game(stake, bigBlind)
+    game = Game(stake, bigBlind, window)
 
     for line in fileInput:
         words = line.split(" ")
@@ -67,13 +45,21 @@ if __name__ == '__main__':
             player = Player(words[1][:-1], words[2], words[3][1:])
             game.addPlayer(player)
 
+            # init for GUI
+            if not USES_CLI:
+                playerBox = ui.playerBox(player, game.handCount, game.bigBlind)
+                game.GUIPlayerBoxes.append(playerBox)
+
+                layout.addWidget(playerBox)
+
+
         elif words[1] == "posts":
             if words[2] == "big":
                 break
 
     state = "GAMEDATA"
 
-    data = helper.followFile(fileInput)
+    data = helper.followFile(fileInput, USES_CLI)
     for line in data:
         words = line.split(" ")
 
@@ -115,3 +101,14 @@ if __name__ == '__main__':
             a=1
         elif state == "SHOWDOWN":
             a=1
+
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+        ui.cli(path)
+    else:
+        app = QApplication(sys.argv)
+        app.setStyle("cleanlooks")
+        window = ui.gui()
+        sys.exit(app.exec_())
