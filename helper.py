@@ -32,4 +32,3 @@ def followDir(path, USES_CLI):
         if len(newFileNames) > len(fileNames):
             files = list(set(newFileNames) - set(fileNames))
             return files[0]
-

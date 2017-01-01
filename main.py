@@ -15,8 +15,10 @@ def main(fileInput, USES_CLI):
 
     window = 0
     if not USES_CLI:
-        window = ui.Window("Pokerhontas", [0, 0, 500, 1080])
-        window.setFixedSize(500, 1080)
+        height = QApplication.instance().desktop().availableGeometry().height()
+        window = ui.Window("Pokerhontas", [0, 0, 300, height])
+        if os.name == "posix":
+            window.setFixedSize(500, 1080)
 
         layout = QVBoxLayout(window)
 
