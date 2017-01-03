@@ -18,10 +18,6 @@ class Game:
 
     def update(self, newBigBlind):
         self.bigBlind = newBigBlind
-        if self.window == 0:
-            self.printCLI()
-        else:
-            self.printGUI(self.window)
         self.handCount += 1
 
     def printCLI(self):
@@ -100,6 +96,16 @@ class Game:
             for player in self.players:
                 if player.name == words[0][:-1]:
                     self.lastPlayertoRaise = player.name
+
+    def summary(self, words):
+        if words[0] == "Total":
+            if self.window == 0:
+                self.printCLI()
+            else:
+                self.printGUI(self.window)
+            self.lastPlayertoRaise = ""
+            for player in self.players: player.allIn = False
+
 
 class Player:
     """A player in a poker game"""

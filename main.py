@@ -88,8 +88,6 @@ def main(fileInput, USES_CLI):
         #change from SUMMARY to GAMEDATA (preflop) at start of new hand
         elif line == "\n" and state != "GAMEDATA":
             state = "GAMEDATA"
-            game.lastPlayertoRaise = ""
-            for player in game.players: player.allIn = False
 
         #state handling
         if state == "GAMEDATA": game.gamedata(words)
@@ -99,8 +97,7 @@ def main(fileInput, USES_CLI):
             a=1
         elif state == "RIVER":
             a=1
-        elif state == "SUMMARY":
-            a=1
+        elif state == "SUMMARY": game.summary(words)
         elif state == "SHOWDOWN":
             a=1
 
