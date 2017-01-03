@@ -93,8 +93,15 @@ class playerBox(QWidget):
 
 
 def gui():
-    window = Window("Pokerhontas Init", [300, 300, 250, 100])
-    window.setFixedSize(250, 100)
+    desktopGeom = QApplication.instance().desktop().availableGeometry()
+    windowWidth = 250
+    windowHeight = 100
+    windowGeom = [desktopGeom.width()/2 - windowWidth/2,
+                  desktopGeom.height()/2 - windowHeight/2,
+                  windowWidth, windowHeight]
+
+    window = Window("Pokerhontas Init", windowGeom)
+    window.setFixedSize(windowWidth, windowHeight)
 
 
     layout = QGridLayout(window)
